@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+    <!-- Webpage Title -->
+    <title>Today's Youtube Video Home</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <!-- Font Awesome CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300&display=swap" rel="stylesheet">
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <!-- Google Web Font for title and sub -->
+
+
+    <!-- Google Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <style>
+        * {
+            font-family: 'IBM Plex Sans KR', sans-serif;
+
+        }
+
+        body {
+            background-color: #fff7cb;
+            min-height: 100vh;
+        {#padding-top: 3.25rem;#}
+
+        }
+
+        .wrap {
+            width: 100%;
+            height: 200px;
+            background-color: #fffee2;
+        }
+
+        .today {
+            font-weight: lighter;
+
+
+        }
+
+        .title {
+
+            font-size: 55px;
+            font-family: 'Rajdhani', sans-serif;
+            color: #ff6d0a;
+
+
+        }
+
+        .subtitle {
+            font-size: 25px;
+            color: black;
+            font-weight: bold;
+
+        }
+
+        .section {
+            padding: 1rem 1.5rem;
+            max-width: 750px;
+            margin: auto;
+        }
+
+        .is-sparta {
+            color: #e8344e !important;
+        }
+
+        .button.is-sparta {
+            background-color: #ffe9a4;
+            border-color: transparent;
+            color: dimgray !important;
+            border-radius: 20px;
+        }
+
+        .button.is-sparta.is-outlined {
+            background-color: transparent;
+            border-color: #ffe9a4;
+            color: #ff9202 !important;
+            border-radius: 20px;
+        }
+
+        .button.is-sparta.is-outlined:hover {
+            border: 3px solid palegoldenrod;
+        }
+
+        .modal-content {
+            width: 600px;
+            max-width: 80%;
+        }
+
+        input::-webkit-calendar-picker-indicator {
+            display: none;
+        }
+
+        .image img {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
+
+        .card-box {
+            margin: 30px 40px auto 40px;
+
+        }
+
+        .writebtn {
+            position: fixed;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            background: rgba(233, 30, 99, 0.7);
+            width: 150px;
+            height: 40px;
+            border: 1px solid pink;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+
+        .card {
+            height: 400px;
+            margin: 30px;
+
+        }
+
+        .wrap {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .buttonbox {
+            display: flex;
+            flex-direction: row;
+            justify-content: end;
+            align-items: end;
+            margin: 10px;
+        }
+
+        .button.is-today {
+            border-radius: 20px;
+            font-size: larger;
+            background-color: #b2ffbe;
+            color: black;
+            margin-right: 80px;
+            font-weight: bold;
+        }
+
+        .button.is-logout {
+            font-size: small;
+            margin-right: 60px;
+            color: black;
+        }
+
+        .button.is-logout:hover {
+            border: 3px solid #b2ffbe;
+        }
+
+        img.banner {
+            position: absolute;
+            right: 60px;
+        }
+    </style>
+
+    <script>
+        function post() {
+            let url = $("#url").val()
+            let emoticon = $("#emoticon option:checked").text()
+            let comment = $("#comment").val()
+
+            $.ajax({
+                type: "POST",
+                url: "/posting",
+                data: {
+                    url_give: url,
+                    emoticon_give: emoticon,
+                    comment_give: comment
+                },
+                success: function (response) {
+                    $("#video-post").removeClass("is-active")
+                    window.location.reload()
+                }
+            })
+        }
+
+        function logout() {
+            $.removeCookie('mytoken');
+            alert('로그아웃!')
+            window.location.href = '/login'
+        }
+
+
+    </script>
+
+</head>
+<body>
+
+
+<div class="wrap">
+    <section class="section3">
+        <img class="banner" src='https://ifh.cc/g/XGNrO4.jpg' border='0'></a>
+        <h1 class="title">　Today's Youtube Video</h1>
+
+        <h3 class="subtitle">
+            <span class="placeholder col-12 bg-light">　　　　　　　　　　오늘의 영상을 시청해보세요.</span>　　　　　　　　　
+        </h3>
+
+
+        <div class="buttonbox">
+            <button class="button is-today" onclick="location.href='/writing'">오늘의 한마디</button>
+            <button class="button is-logout" onclick="logout()">로그아웃하기</button>
+        </div>
+        <p> 당신의 닉네임 : {{ user_info.nickname }} </p>
+        <p class="today" id="date"></p>
+    </section>
+</div>
+
+
+{% if videos is not none %}
+    <div class="card-box">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for video in videos %}
+                <div class="col">
+                    <div class="card">
+                        <iframe width="100%" height="100%" src="{{ video.embed }}" title="YouTube video player"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ video.nickname }}</h5>
+                            <p class="card-text">{{ video.comment }}</p>
+                            <p class="card-emoticon">{{ video.emoticon }}</p>
+                            </article>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
+
+
+
+
+<div class="modal" id="video-post">
+    <div class="modal-background" onclick='$("#video-post").removeClass("is-active")'></div>
+    <div class="modal-content">
+        <div class="box">
+            <article class="media">
+                <div class="media-content">
+                    <div class="field">
+                        <p class="control">
+                        <div class="mypost" id="postbox">
+                            <div class="form-floating mb-3">
+                                <input type="url" class="form-control" id="url"
+                                       placeholder="name@example.com">
+                                <label for="floatingInput">유튜브 URL</label>
+                            </div>
+                            <div class="input-group mb-3">
+                                <label class="input-group-text" for="inputGroupSelect01">오늘의 감정</label>
+                                <select class="form-select" id="emoticon">
+                                    <option selected>--선택하기--</option>
+                                    <option value="1">😑</option>
+                                    <option value="2">😆</option>
+                                    <option value="3">🙂</option>
+                                    <option value="4">😢</option>
+                                    <option value="5">😡</option>
+                                </select>
+                            </div>
+                            <div class="form-floating">
+                                    <textarea class="form-control" placeholder="Leave a comment here" id="comment"
+                                              style="height: 100px"></textarea>
+                                <label for="floatingTextarea2">내용</label>
+                            </div>
+                        </div>
+                        </p>
+                    </div>
+                    <nav class="level is-mobile">
+                        <div class="level-left">
+
+                        </div>
+                        <div class="level-right">
+                            <div class="level-item">
+                                <a class="button is-sparta" onclick="post()">작성하기</a>
+                            </div>
+                            <div class="level-item">
+                                <a class="button is-sparta is-outlined"
+                                   onclick='$("#video-post").removeClass("is-active")'>취소</a>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </article>
+        </div>
+    </div>
+    <button class="modal-close is-large" aria-label="close"
+            onclick='$("#video-post").removeClass("is-active")'></button>
+</div>
+
+
+<p>
+    <button class="writebtn" onclick='$("#video-post").addClass("is-active")'>추가하기</button>
+</p>
+
+
+</div>
+
+
+</body>
+
+<script>
+    // 오늘 날짜 메인 화면에 띄우기 위한 변수 정의
+    let today = new Date();
+    let year = today.getFullYear() // 년도
+    let month = today.getMonth() + 1 // 월
+    let day = today.getDate() // 일
+    let week = ['일', '월', '화', '수', '목', '금']
+    let getDate = today.getDay() // 요일
+    let date = week[getDate]
+    document.getElementById("date").innerHTML = year + '년 ' + month + '월 ' + day + '일 ' + date + "요일"
+</script>
+</html>
